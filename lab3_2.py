@@ -66,7 +66,7 @@ def decisionTree(pred_train, pred_test, tar_train, tar_test):
         plt.show()
     pass
 
-def Gausin(pred_train, pred_test, tar_train, tar_test):
+def MultinomialNB_Model(pred_train, pred_test, tar_train, tar_test):
     mnb = MultinomialNB()  # optimized for nominal features but can work for numeric ones as well
     mnb.fit(pred_train, np.ravel(tar_train, order='C'))
     predictions = mnb.predict(pred_test)
@@ -88,6 +88,15 @@ def MLPClassifierModel(pred_train, pred_test, tar_train, tar_test):
     print("Accuracy score of our model with MLP under cross validation :", scores.mean())
     pass
 
+def GaussianMode(pred_train, pred_test, tar_train, tar_test):
+    gaussianNb = GaussianNB()  #
+    gaussianNb.fit(pred_train, np.ravel(tar_train, order='C'))
+    predictions = gaussianNb.predict(pred_test)
+
+    print("Accuracy score of our model with Gaussian :", accuracy_score(tar_test, predictions))
+    scores = cross_val_score(gaussianNb, pred_test, tar_test, cv=10)
+    print("Accuracy score of our model with Gaussian under cross validation :", scores.mean())
+    pass
 
 def train(data):
     nRow, nCol = data.shape
@@ -103,9 +112,10 @@ def train(data):
     # print(tar_test.shape)
 
     #decisionTree(pred_train, pred_test, tar_train, tar_test)
-    #Gausin(pred_train, pred_test, tar_train, tar_test)
+    #MultinomialNB_Model(pred_train, pred_test, tar_train, tar_test)
     #KNN_classifier(pred_train, pred_test, tar_train, tar_test)
-    MLPClassifierModel(pred_train, pred_test, tar_train, tar_test)
+    #MLPClassifierModel(pred_train, pred_test, tar_train, tar_test)
+    GaussianMode(pred_train, pred_test, tar_train, tar_test)
     pass
 
 
