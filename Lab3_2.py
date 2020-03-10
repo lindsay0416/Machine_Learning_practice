@@ -39,26 +39,14 @@ def boxplot(data):
     ax.set_xticklabels(['Petal Length', 'Petal Width', 'Sepal Length', 'Sepal Width', 'Class'])
     plt.show()
 
-def train(data):
-    nRow, nCol = data.shape
-    predictors = data.iloc[:, :nCol - 1]
-    #print(predictors)
-    target = data.iloc[:, -1]
-    #print(target)
-
-    pred_train, pred_test, tar_train, tar_test = train_test_split(predictors,target,test_size=0.3, random_state=42)
-    # print(pred_train.shape)
-    # print(tar_train.shape)
-    # print(pred_test.shape)
-    # print(tar_test.shape)
-
+def decisionTree(pred_train, pred_test, tar_train, tar_test):
     split_threshold = 3
     fpr = dict()  # store false positive rate in a dictionary object
     tpr = dict()  # likewise, store the true positive rate
     roc_auc = dict()
-    print('*'*60)
+    print('*' * 60)
     for i in range(2, split_threshold):
-        classifier = DecisionTreeClassifier(criterion='entropy',min_samples_split=2)  # configure the classifier
+        classifier = DecisionTreeClassifier(criterion='entropy', min_samples_split=2)  # configure the classifier
         classifier = classifier.fit(pred_train, tar_train)  # train a decision tree model
         predictions = classifier.predict(pred_test)  # deploy model and make predictions on test set
         prob = classifier.predict_proba(pred_test)  # obtain probability scores for each sample in test set
@@ -76,8 +64,48 @@ def train(data):
         print("AUC values of the decision tree", roc_auc[x])
         plt.plot(fpr[x], tpr[x], color='darkorange', label='ROC curve (area = %0.2f)' % roc_auc[x])
         plt.show()
+    pass
+
+def Gausin(pred_train, pred_test, tar_train, tar_test):
+    mnb = MultinomialNB()  # optimized for nominal features but can work for numeric ones as well
+    mnb.fit(pred_train, np.ravel(tar_train, order='C'))
+    predictions = mnb.predict(pred_test)
+    print("Accuracy score of our model with Multinomial Naive Bayes:", accuracy_score(tar_test, predictions))
+
+def KNN_classifier(pred_train, pred_test, tar_train, tar_test):
+    nbrs = KNeighborsClassifier(n_neighbors=3)
+    nbrs.fit(pred_train, np.ravel(tar_train, order='C'))
+    predictions = nbrs.predict(pred_test)
+    print("Accuracy score of our model with kNN :", accuracy_score(tar_test, predictions))
+    pass
+
+def MLPClassifier(pred_train, pred_test, tar_train, tar_test):
+    clf = MLPClassifier(activation='logistic',learning_rate_init=0.1)
+    clf.fit(pred_train, np.ravel(tar_train, order='C'))
+    predictions = clf.predict(pred_test)
+    print("Accuracy score of our model with MLP :", accuracy_score(tar_test, predictions))
+    scores = cross_val_score(clf, pred_test, tar_test, cv=10)
+    print("Accuracy score of our model with MLP under cross validation :", scores.mean())
+    pass
 
 
+def train(data):
+    nRow, nCol = data.shape
+    predictors = data.iloc[:, :nCol - 1]
+    #print(predictors)
+    target = data.iloc[:, -1]
+    #print(target)
+
+    pred_train, pred_test, tar_train, tar_test = train_test_split(predictors,target,test_size=0.3, random_state=42)
+    # print(pred_train.shape)
+    # print(tar_train.shape)
+    # print(pred_test.shape)
+    # print(tar_test.shape)
+
+    #decisionTree(pred_train, pred_test, tar_train, tar_test)
+    #Gausin(pred_train, pred_test, tar_train, tar_test)
+    #KNN_classifier(pred_train, pred_test, tar_train, tar_test)
+    MLPClassifier(pred_train, pred_test, tar_train, tar_test)
     pass
 
 
