@@ -37,20 +37,26 @@ def getModel():
     return mlp
 
 def plotResult(scores_train,scores_test,loss):
-    fig, ax = plt.subplots(3, sharex=True, sharey=True)
-    ax[0].plot(scores_train)
-    ax[0].set_title('Train mean accuracy')
-    ax[1].plot(scores_test)
-    ax[1].set_title('Test mean accuracy')
-    ax[2].plot(loss)
-    ax[2].set_title('Loss')
-    fig.suptitle("Accuracy &Loss over epochs", fontsize=14)
+    if 0: #style 1
+        fig, ax = plt.subplots(3, sharex=True, sharey=True)
+        ax[0].plot(scores_train)
+        ax[0].set_title('Train mean accuracy')
+        ax[1].plot(scores_test)
+        ax[1].set_title('Test mean accuracy')
+        ax[2].plot(loss)
+        ax[2].set_title('Loss')
+        fig.suptitle("Accuracy &Loss over epochs", fontsize=14)
+    else:# style 2
+        plt.plot(scores_train, label='scores_train')
+        plt.plot(scores_test, label='scores_test')
+        plt.plot(loss, label='loss')
+        plt.legend()
     plt.show()
 
 def train(x_train, y_train, x_test, y_test):
     mlp = getModel()
 
-    N_EPOCHS = 25
+    N_EPOCHS = 50
     N_CLASSES = np.unique(y_train)
 
     scores_train = []
