@@ -109,8 +109,8 @@ def main():
     data  = getData()
     (x_train, y_train), (x_test, y_test) = splitRowData(data)
 
-    trainMiniBatch(x_train, y_train, x_test, y_test)
-    #train(x_train, y_train, x_test, y_test)
+    #trainMiniBatch(x_train, y_train, x_test, y_test)
+    train(x_train, y_train, x_test, y_test)
 
 if __name__=='__main__':
     main()
